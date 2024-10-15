@@ -1,52 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:post_sharing/presentation/widgets/video_player_widget.dart';
-import 'package:share_plus/share_plus.dart';
 
 class PostWidget extends StatelessWidget {
   final String content;
   final String postType;
+  final String postId;
+  final VoidCallback onShare;
+  final String? url;
 
-  PostWidget({required this.content, required this.postType});
-
-  // Function to share the post
-  void _sharePost(BuildContext context) {
-    final String postUrl = "https://myapp.com/posts/$postType"; // Replace with actual dynamic link logic
-
-    Share.share(
-      'Check out this $postType post: $postUrl',
-      subject: 'Post from My App',
-    );
-  }
+  const PostWidget({
+    required this.content,
+    required this.postType,
+    required this.postId,
+    required this.onShare,
+    this.url,
+  });
 
   @override
   Widget build(BuildContext context) {
-    Widget displayContent;
-
-    // Determine what to display based on the post type
-    if (postType == "text") {
-      displayContent = Text(content);
-    } else if (postType == "video") {
-      displayContent = AspectRatio(
-        aspectRatio: 16 / 9,
-        child: VideoPlayerWidget(videoUrl: content),
-      );
-    } else if (postType == "image") {
-      displayContent = Image.network(content);
-    } else {
-      displayContent = Text("Invalid Post Type");
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        displayContent,
-        SizedBox(height: 20),
-        ElevatedButton.icon(
-          onPressed: () => _sharePost(context),
-          icon: Icon(Icons.share),
-          label: Text('Share Post'),
-        ),
-      ],
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: postType == 'text'
+            ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              content,
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Post Type: $postType'),
+                IconButton(
+                  icon: Icon(Icons.share),
+                  onPressed: onShare, // Call the onShare function
+                ),
+              ],
+            ),
+          ],
+        )
+            : postType == 'image'
+            ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (url != null) Image.network(url!),
+            SizedBox(height: 10),
+            IconButton(
+              icon: Icon(Icons.share),
+              onPressed: onShare, // Call the onShare function
+            ),
+          ],
+        )
+            : Text("Error"),
+      ),
     );
   }
 }

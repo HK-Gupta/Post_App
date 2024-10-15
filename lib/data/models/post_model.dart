@@ -1,12 +1,14 @@
 class PostModel {
   final String id;
   final String type;  // 'text', 'image', 'video'
-  final String content;  // Can be text, URL for image, or video URL
+  final String content;
+  final String? url;// Can be text, URL for image, or video URL
 
   PostModel({
     required this.id,
     required this.type,
     required this.content,
+    this.url
   });
 
   // Factory method to convert Firestore data to PostModel
@@ -15,6 +17,7 @@ class PostModel {
       id: json['id'] ?? '',
       type: json['type'] ?? 'text',
       content: json['content'] ?? '',
+      url: json['url']??'',
     );
   }
 
@@ -24,6 +27,7 @@ class PostModel {
       'id': id,
       'type': type,
       'content': content,
+      'url': url,
     };
   }
 }
