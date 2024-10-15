@@ -32,18 +32,18 @@ class _HomePageState extends State<HomePage> {
             _currentIndex = index; // Switch tabs
           });
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.text_snippet),
-            label: 'Text Post',
+            label: 'Text',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.video_collection),
-            label: 'Video Post',
+            label: 'Video',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.image),
-            label: 'Image Post',
+            label: 'Image',
           ),
         ],
       ),
