@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           title: 'Post Sharing App',
           home: HomePage(),
+          theme: ThemeData.dark(),
         ),
       ),
     );
