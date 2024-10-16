@@ -1,16 +1,26 @@
-# post_sharing
+# Post Sharing App
 
-A new Flutter project.
+This is a simple Flutter application that displays posts, including text and image posts. The app fetches data from Firebase and allows users to share posts using the `share_plus` package.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- Display posts with text and image types.
+- Share posts using a share button.
+- Firebase integration to fetch posts.
+- Bloc architecture using `flutter_bloc` for state management.
 
-A few resources to get you started if this is your first Flutter project:
+## Project Structure
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **business**: Contains `Cubit` and state management classes.
+- **data**: Contains repository for Firebase-related operations.
+- **presentation**: Contains UI widgets and pages.
+- **widgets**: Custom reusable widgets, such as `PostWidget`.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
+## Firebase Setup
+
+1. Set up a Firebase project and enable Firestore.
+2. Add Firebase to your Flutter app:
+   - Add the `google-services.json` file in the `android/app` directory.
+   - Enable Firebase Firestore and configure rules for testing.
