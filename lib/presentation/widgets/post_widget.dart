@@ -23,7 +23,7 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   VideoPlayerController? _videoController;
   bool _isPlaying = false; // Track if the video is playing
-
+  bool liked = false;
   @override
   void initState() {
     super.initState();
@@ -31,6 +31,7 @@ class _PostWidgetState extends State<PostWidget> {
       // Initialize the video player if it's a video post
       _videoController = VideoPlayerController.network(widget.url!)
         ..initialize().then((_) {
+          _videoController!.play();
           setState(() {}); // Update the state once the video is loaded
         });
     }
@@ -57,86 +58,135 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.all(8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: widget.postType == 'text'
-            ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              widget.content,
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      elevation: 10,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+              color: const Color(0xFF03DAC5),
+              width: 1.5
+          ),
+          borderRadius: BorderRadius.circular(15)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: widget.postType == 'text'
+              ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Post Type: ${widget.postType}'),
-                IconButton(
-                  icon: Icon(Icons.share),
-                  onPressed: widget.onShare, // Call the onShare function
+                Text(
+                  widget.content,
+                  style: const TextStyle(fontSize: 20),
                 ),
-              ],
-            ),
-          ],
-        )
-            : widget.postType == 'image'
-            ? Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (widget.url != null && widget.url!.isNotEmpty)
-              Text(widget.content, style: TextStyle(fontSize: 21)),
-            if (widget.url != null && widget.url!.isNotEmpty)
-              Image.network(
-                widget.url!,
-                errorBuilder: (context, error, stackTrace) {
-                  return Text("Failed to load image"); // Error handling for invalid URLs
-                },
-              ),
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: widget.onShare,
-            ),
-          ],
-        )
-            : widget.postType == 'video'
-            ? SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (_videoController != null &&
-                  _videoController!.value.isInitialized)
-                Column(
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.4, // Adjust the height based on your design
-                      child: AspectRatio(
-                        aspectRatio: _videoController!.value.aspectRatio,
-                        child: VideoPlayer(_videoController!),
+                    InkWell(
+                      onTap: () { setState(() {
+                        liked = !liked;
+                      }); },
+                      child: liked? const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      ):
+                      const Icon(
+                        Icons.favorite,
                       ),
                     ),
-                    SizedBox(height: 10),
                     IconButton(
-                      icon: Icon(
-                        _isPlaying ? Icons.pause : Icons.play_arrow,
-                      ),
-                      onPressed: _togglePlayPause, // Toggle play/pause
+                      icon: Icon(Icons.share),
+                      onPressed: widget.onShare, // Call the onShare function
                     ),
                   ],
-                )
-              else
-                CircularProgressIndicator(), // Show loading spinner until video is ready
-              SizedBox(height: 10),
-              Text(widget.content),
-              IconButton(
-                icon: Icon(Icons.share),
-                onPressed: widget.onShare,
-              ),
-            ],
-          ),
-        )
-            : Text("Unknown post type"),
+                ),
+              ],
+          )
+              : widget.postType == 'image'
+              ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (widget.url != null && widget.url!.isNotEmpty)
+                  Text(widget.content, style: TextStyle(fontSize: 21)),
+                if (widget.url != null && widget.url!.isNotEmpty)
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.network(
+                      widget.url!,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Text("Failed to load image"); // Error handling for invalid URLs
+                      },
+                    ),
+                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () { setState(() {
+                        liked = !liked;
+                      }); },
+                      child: liked? const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                      ):
+                      const Icon(
+                        Icons.favorite,
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.share),
+                      onPressed: widget.onShare,
+                    ),
+                  ],
+                ),
+              ],
+          )
+              : widget.postType == 'video'
+              ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (_videoController != null &&
+                        _videoController!.value.isInitialized)
+                      InkWell(
+                        onTap: _togglePlayPause,
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.9, // Adjust the height based on your design
+                          child: AspectRatio(
+                            aspectRatio: _videoController!.value.aspectRatio,
+                            child: VideoPlayer(_videoController!),
+                          ),
+                        ),
+                      )
+                    else
+                      CircularProgressIndicator(), // Show loading spinner until video is ready
+                    SizedBox(height: 10),
+                    Text(widget.content),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () { setState(() {
+                            liked = !liked;
+                          }); },
+                          child: liked? const Icon(
+                            Icons.favorite,
+                            color: Colors.red,
+                          ):
+                          const Icon(
+                            Icons.favorite,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.share),
+                          onPressed: widget.onShare,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+              : Text("Unknown post type"),
+        ),
       ),
     );
   }

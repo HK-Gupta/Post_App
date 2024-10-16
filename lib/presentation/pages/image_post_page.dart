@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_sharing/business/cubit/post_cubit.dart';
 import 'package:post_sharing/business/cubit/post_state.dart';
-import 'package:share_plus/share_plus.dart'; // For sharing functionality
+import 'package:share_plus/share_plus.dart';
 import '../widgets/post_widget.dart';
 
 class ImagePostPage extends StatelessWidget {
+  const ImagePostPage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    // Trigger fetchPosts method when the widget is built
     context.read<PostCubit>().fetchPosts();
 
     return BlocBuilder<PostCubit, PostState>(
@@ -21,7 +22,7 @@ class ImagePostPage extends StatelessWidget {
 
           // Check if there are any image posts
           if (imagePosts.isEmpty) {
-            return Center(child: Text("No image posts available"));
+            return const Center(child: Text("No image posts available"));
           }
 
           // Use ListView to display all image posts
@@ -45,7 +46,7 @@ class ImagePostPage extends StatelessWidget {
         } else if (state is PostError) {
           return Center(child: Text('Error: ${state.message}'));
         } else {
-          return Center(child: Text("Unknown state"));
+          return const Center(child: Text("Unknown state"));
         }
       },
     );

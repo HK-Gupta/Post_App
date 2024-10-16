@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
           title: 'Post Sharing App',
           home: HomePage(),
           theme: ThemeData.dark(),
+          debugShowCheckedModeBanner: false,
         ),
       ),
     );

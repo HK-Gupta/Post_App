@@ -39,15 +39,15 @@ class _HomePageState extends State<HomePage> {
         // Navigate to the appropriate tab based on postType
         if (postType == 'text') {
           setState(() {
-            _currentIndex = 0;  // Set to Text tab
+            _currentIndex = 0;
           });
         } else if (postType == 'video') {
           setState(() {
-            _currentIndex = 1;  // Set to Video tab
+            _currentIndex = 1;
           });
         } else if (postType == 'image') {
           setState(() {
-            _currentIndex = 2;  // Set to Image tab
+            _currentIndex = 2;
           });
         }
       }
@@ -86,7 +86,13 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Posts App'),
+        surfaceTintColor: Colors.transparent,
+        title: const Text(
+            'Posts App',
+          style: TextStyle(
+            fontWeight: FontWeight.bold
+          ),
+        ),
       ),
       body: _pages[_currentIndex], // Show content based on selected tab
       bottomNavigationBar: BottomNavigationBar(
