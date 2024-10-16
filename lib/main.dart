@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:post_sharing/data/repository/firebase_repository.dart';
 import 'package:post_sharing/presentation/home_page.dart';
 
+import 'business/cubit/post_cubit.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -20,9 +22,18 @@ class MyApp extends StatelessWidget {
           create: (context) => FirebaseRepository(),
         ),
       ],
-      child: MaterialApp(
-        title: 'Post Sharing App',
-        home: HomePage(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => PostCubit(
+              firebaseRepository: RepositoryProvider.of<FirebaseRepository>(context),
+            ),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Post Sharing App',
+          home: HomePage(),
+        ),
       ),
     );
   }

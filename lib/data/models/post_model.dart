@@ -17,9 +17,10 @@ class PostModel {
       id: json['id'] ?? '',
       type: json['type'] ?? 'text',
       content: json['content'] ?? '',
-      url: json['url']??'',
+      url: json['url'] != null && json['url'].isNotEmpty ? json['url'] : null, // Ensure it's either a valid URL or null
     );
   }
+
 
   // Convert to Map for saving in Firestore
   Map<String, dynamic> toMap() {

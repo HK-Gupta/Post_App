@@ -43,17 +43,28 @@ class PostWidget extends StatelessWidget {
           ],
         )
             : postType == 'image'
-            ? Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (url != null) Image.network(url!),
-            SizedBox(height: 10),
-            IconButton(
-              icon: Icon(Icons.share),
-              onPressed: onShare, // Call the onShare function
-            ),
-          ],
-        )
+            ? SingleChildScrollView(
+              child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+              if (postType == 'image' && url != null && url!.isNotEmpty)
+                Text(content, style: TextStyle(fontSize: 21),),
+                Image.network(
+                  url!,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Text("Failed to load image"); // Error handling for invalid URLs
+                  },
+                ),
+              if (postType == 'text')
+                Text(content), // For text-based posts
+              // Add buttons, sharing functionality, etc.
+              IconButton(
+                icon: Icon(Icons.share),
+                onPressed: onShare,
+              ),
+                        ],
+                      ),
+            )
             : Text("Error"),
       ),
     );
